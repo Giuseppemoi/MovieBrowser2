@@ -21,7 +21,7 @@ export default function Nav() {
                 </IconContext.Provider>
             </NavLink>
 
-            <NavLink to="/detail">
+            <NavLink to="/profile">
                 <IconContext.Provider value={icons}>
                     <FaUser/>
                 </IconContext.Provider>

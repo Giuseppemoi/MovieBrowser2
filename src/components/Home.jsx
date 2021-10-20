@@ -2,6 +2,7 @@ import Nav from "./NavBar"
 import {AiFillPlayCircle} from "react-icons/ai"
 import {IconContext} from "react-icons"
 import Carousel from 'react-elastic-carousel'
+import {Link} from "react-router-dom";
 
 
 export default function Home(props) {
@@ -10,17 +11,21 @@ export default function Home(props) {
         const movie = props.movies[Math.floor(Math.random() * 20)]
         return (
             <div className="images">
-                <img src={movie && "https://image.tmdb.org/t/p/w500" + movie.backdrop_path}
-                     alt={movie && movie.title}/>
-                <div className="spotlight">
-                    <IconContext.Provider value={{size: '7vw'}}>
-                        <AiFillPlayCircle />
-                    </IconContext.Provider>
-                    <div>
-                        <p>Movie Spotlight</p>
-                        <h3>{movie && movie.title}</h3>
+                <Link to={movie && "/detail/" + movie.id}>
+                    <img src={movie && "https://image.tmdb.org/t/p/w500" + movie.backdrop_path}
+                         alt={movie && movie.id}/>
+                </Link>
+                <Link className="link" to={movie && "/detail/" + movie.id}>
+                    <div className="spotlight">
+                        <IconContext.Provider value={{size: '7vw'}}>
+                            <AiFillPlayCircle />
+                        </IconContext.Provider>
+                        <div>
+                            <p>Movie Spotlight</p>
+                            <h3>{movie && movie.title}</h3>
+                        </div>
                     </div>
-                </div>
+                </Link>
             </div>
         )
     }
@@ -29,7 +34,11 @@ export default function Home(props) {
         const dataMovies = props.movies
 
         return  dataMovies.map(movie => {
-            return <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
+            return (
+                <Link to={movie && "/detail/" + movie.id}>
+                    <img key={movie.id} src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
+                </Link>
+            )
         })
     }
 

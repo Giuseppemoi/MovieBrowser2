@@ -10,6 +10,7 @@ import {
 import Home from './Home'
 import Detail from './Detail'
 import Discover from './Discover'
+import Nav from "./NavBar";
 
 
 export default function App() {
@@ -18,7 +19,6 @@ export default function App() {
     const PARAMS = '&language=en-US&sort_by=popularity.desc&page=1'
     const URL_Trending = 'trending/movie/day?'
     const URL_Genres = 'genre/movie/list?'
-    //const API_URL = BASE_URL + URL_Trending + API_KEY + PARAMS
 
     const [movies, setMovies] = useState([])
     const [genres, setGenres] = useState([])
@@ -30,19 +30,18 @@ export default function App() {
     useEffect(() => {
         async function fetchMovie() {
             const moviesData = await moviesDataPromise(URL_Trending)
-            setMovies(moviesData.data.results)
+            await setMovies(moviesData.data.results)
             const genresData = await moviesDataPromise(URL_Genres)
-            setGenres(genresData.data.genres)
+            await setGenres(genresData.data.genres)
         }
-        fetchMovie()
+        fetchMovie().then()
     }, [])
 
     return (
         <Router>
             <div>
-                {/*<Nav/>*/}
                 <Switch>
-                    <Route path="/detail">
+                    <Route path="/detail/:id">
                         <Detail />
                     </Route>
                     <Route path="/discover">
@@ -50,6 +49,10 @@ export default function App() {
                     </Route>
                     <Route path="/home">
                         <Home movies={movies}/>
+                    </Route>
+                    <Route path="/profile">
+                        <Nav />
+                        <p>Profile</p>
                     </Route>
                     <Route path="/">
                         <Redirect to="/home" />

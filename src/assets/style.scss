@@ -38,6 +38,7 @@ body {
   position: fixed;
   bottom: 0;
   padding: 1vh 0;
+  z-index: 2;
   a {
      color: #3b3b43;
   }
@@ -90,6 +91,7 @@ body {
 
 .slider {
   overflow: visible;
+  margin-top: 3vh;
   img {
     height: 44vh;
     border-radius: 2em;
@@ -147,13 +149,13 @@ body {
     @include divSize(50%);
     position: relative;
     top: -6vh;
-    z-index: -1;
+    z-index: 0;
   }
   div:nth-child(4n+4) {
     @include divSize(60%);
     position: relative;
     top: -9.5vh;
-    z-index: -1;
+    z-index: 0;
   }
   .movieGenre {
     padding: 0 2vw;
@@ -170,3 +172,16 @@ body {
     }
   }
 }
+
+.color {
+  color: $orange-color;
+  text-decoration: underline;
+}
+.link {
+  color : inherit;
+  text-decoration : none;
+}
+
+//.movieRelated {
+//
+//}

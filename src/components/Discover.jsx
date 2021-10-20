@@ -3,6 +3,7 @@ import {BiSearch} from "react-icons/bi"
 import {IconContext} from "react-icons"
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Link} from "react-router-dom";
 
 export default function Discover(props) {
     const genresArrays = props.genres
@@ -13,6 +14,7 @@ export default function Discover(props) {
 
     const [genreId, setGenreId] = useState(28)
     const [page, setPage] = useState(1)
+    const [isFetching, setIsFetching] = useState(false)
 
     const PARAMS = `&language=en-US&sort_by=popularity.desc&page=${page}&with_genres=`
 
@@ -24,74 +26,75 @@ export default function Discover(props) {
 
     async function fetchMovie() {
         const moviesData = await moviesDataByGenrePromise(genreId)
-        setListMoviesGenre(moviesData.data.results)
+        // setListMoviesGenre(prevState => [...prevState, ...moviesData.data.results])
+        setPage(page + 1)
+        setIsFetching(false)
+        return moviesData.data.results
+    }
+
+    const onScroll = () => {
+        if(window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight){
+            return;
+        }
+        setIsFetching(true)
     }
 
     useEffect(() => {
-        fetchMovie()
+        setPage(1)
+        console.log(page)
+        fetchMovie().then((result) => setListMoviesGenre(result))
+        // setIsFetching(true)
+        window.addEventListener("scroll", onScroll);
+        return () => window.removeEventListener("scroll", onScroll);
     }, [genreId])
 
     useEffect(() => {
-        document.addEventListener('scroll', (e) => {
-            console.log(e.path)
-            if ((e.path[1].innerHeight + e.path[1].scrollY) >= e.path[0].body.offsetHeight) {
-                setPage(page + 1)
-                moviesDataByGenrePromise(genreId).then((result) => {
-                    // setListMoviesGenre([...listMoviesGenre, ...result.data.results])
-                    const newData = result.data.results
-                    setListMoviesGenre(listMoviesGenre.concat(newData))
-                })
-            }
-        })
-    }, [listMoviesGenre])
+        if (isFetching) {
+            fetchMovie().then((result) => setListMoviesGenre(prevState => [...prevState, ...result]))
+        }
+    }, [isFetching]);
 
     function MoviesGenres() {
         return (
             listMoviesGenre.map(movie => {
                 return (
-                    <div className="movieGenre">
-                        <div className="divSize">
-                            <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
-                        </div>
-                        <p>{movie.title} <span>({movie.release_date.split('-')[0]})</span></p>
+                    <div className="movieGenre" key={movie.id}>
+                        <Link className="link" to={movie && "/detail/" + movie.id}>
+                            <div className="divSize">
+                                <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
+                            </div>
+                            <p>{movie.title} <span>({movie.release_date && movie.release_date.split('-')[0]})</span></p>
+                        </Link>
                     </div>
                 )
             })
         )
     }
 
-    // const [tagStyle, setTagStyle] = useState(null)
-
-    function changeGenre(e) {
-        e.preventDefault()
-        setGenreId(e.target.id)
-        e.target.style.color = '#FF8F71'
-        e.target.style.textDecoration = 'underline'
-        // setTagStyle((prev) => prev = document.getElementById(e.target.id).style)
-        // setTagStyle((prev) => prev.color = '#FF8F71')
-        // setTagStyle(tagStyle.textDecoration = 'underline')
-        // console.log(tagStyle)
-        // tagStyle.color = '#FF8F71'
-        // tagStyle.textDecoration = 'underline'
-    }
-
     function NavGenres() {
+        function changeGenre(e) {
+            // e.preventDefault()
+            setGenreId(e.target.id)
+            e.target.classList.add('color')
+        }
+
         return (
             genresArrays.map(genre => {
                 return (
                     // <input onClick={(e) => changeGenre(e)} id={genre.id} type="button" value={genre.name}/>
                     // <a onClick={(e) => changeGenre(e)} id={genre.id} >{genre.name}</a>
-                    <p onClick={(e) => changeGenre(e)} id={genre.id} >{genre.name}</p>
+                    <p onClick={(e) => changeGenre(e)} id={genre.id} key={genre.id} >{genre.name}</p>
                 )
             })
         )
     }
+
     return (
         <div>
             <Nav/>
             <h1 className='title'><span>Movie</span>Browser</h1>
             <div className='input'>
-                <input />
+                <input placeholder={'Sherlock Holms'} />
                 <IconContext.Provider value={{size: '3vh'}}>
                     <BiSearch />
                 </IconContext.Provider>
