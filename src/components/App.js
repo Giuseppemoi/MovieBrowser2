@@ -1,51 +1,58 @@
 import React, {useEffect, useState} from "react";
+import axios from "axios";
 import {
     BrowserRouter as Router,
     Switch,
-    Route, Redirect
+    Route,
+    Redirect
 } from "react-router-dom";
 
-import Nav from "./NavBar";
 import Home from './Home'
 import Detail from './Detail'
 import Discover from './Discover'
-import axios from "axios";
+import Nav from "./NavBar";
 
 
 export default function App() {
     const API_KEY = 'api_key=61330235259d30ec7f0c37b884800e04'
     const BASE_URL = 'https://api.themoviedb.org/3/'
-    const PARAMS = '&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=true&page=1&with_watch_monetization_types=flatrate'
+    const PARAMS = '&language=en-US&sort_by=popularity.desc&page=1'
     const URL_Trending = 'trending/movie/day?'
-    const API_URL = BASE_URL + URL_Trending + API_KEY + PARAMS
+    const URL_Genres = 'genre/movie/list?'
 
     const [movies, setMovies] = useState([])
+    const [genres, setGenres] = useState([])
 
-    async function moviesPromise() {
-        return await axios.get(API_URL)
+    async function moviesDataPromise(url) {
+        return await axios.get(BASE_URL + url + API_KEY + PARAMS)
     }
 
     useEffect(() => {
         async function fetchMovie() {
-            const data = await moviesPromise()
-            setMovies(data.data.results)
+            const moviesData = await moviesDataPromise(URL_Trending)
+            await setMovies(moviesData.data.results)
+            const genresData = await moviesDataPromise(URL_Genres)
+            await setGenres(genresData.data.genres)
         }
-        fetchMovie()
+        fetchMovie().then()
     }, [])
 
     return (
         <Router>
             <div>
-                <Nav/>
                 <Switch>
-                    <Route path="/detail">
+                    <Route path="/detail/:id">
                         <Detail />
                     </Route>
                     <Route path="/discover">
-                        <Discover />
+                        <Discover genres={genres} />
                     </Route>
                     <Route path="/home">
-                        <Home movies={movies} />
+                        <Home movies={movies}/>
+                    </Route>
+                    <Route path="/profile">
+                        <Nav />
+                        <p>Profile</p>
                     </Route>
                     <Route path="/">
                         <Redirect to="/home" />

@@ -15,13 +15,13 @@ export default function Nav() {
                 </IconContext.Provider>
             </NavLink>
 
-            <NavLink to="/detail">
+            <NavLink to="/discover">
                 <IconContext.Provider value={icons}>
                     <IoSearchCircle />
                 </IconContext.Provider>
             </NavLink>
 
-            <NavLink to="/discover">
+            <NavLink to="/profile">
                 <IconContext.Provider value={icons}>
                     <FaUser/>
                 </IconContext.Provider>

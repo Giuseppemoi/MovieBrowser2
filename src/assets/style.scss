@@ -3,6 +3,14 @@
 $base-color: #15141F;
 $orange-color: #FF8F71;
 
+@mixin divSize($percent) {
+  .divSize{
+    border-radius: 1em;
+    overflow: hidden;
+    height: $percent;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +19,7 @@ $orange-color: #FF8F71;
 body {
   font-family: 'Lato', sans-serif;
   color: #fff;
-  background-color: $base-color
+  background-color: $base-color;
 }
 
 .title {
@@ -23,12 +31,14 @@ body {
 }
 
 .navBar {
+  background-color: $base-color;
   width: 100%;
   display: flex;
   justify-content: space-evenly;
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  margin-bottom: 2vh;
+  padding: 1vh 0;
+  z-index: 2;
   a {
      color: #3b3b43;
   }
@@ -41,16 +51,137 @@ body {
 }
 
 .images {
-  //display: flex;
+  position: relative;
   border-radius: 2em;
-  justify-content: center;
   margin: 4vh 4vw;
   height: 25vh;
-  position:relative;
-  display:block;
   overflow: hidden;
   img {
-    width: 100%;
-    overflow: hidden
+    height: 100%;
+  }
+  .spotlight {
+    display: flex;
+    align-items: center;
+    //width: auto;
+    height: 7vh;
+    border-radius: 1em;
+    background-color: #00000070;
+    backdrop-filter: blur(2px);
+    border: 2px solid #00000050;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding-right: 1em;
+    svg {
+      margin-left: 5vw;
+      color: $orange-color;
+    }
+    div {
+      //text-size-adjust: auto;
+      margin-left: 5vw;
+      p {
+        font-size: .8em;
+      }
+      h3 {
+        font-size: 1em;
+      }
+    }
   }
 }
+
+.slider {
+  overflow: visible;
+  margin-top: 3vh;
+  img {
+    height: 44vh;
+    border-radius: 2em;
+  }
+  .rec-slider-container {
+    margin: 0;
+  }
+}
+
+.input {
+  margin: 7% 4vw 0 4vw;
+  position: relative;
+  input {
+    padding-left: 14vw;
+    color: white;
+    width: 85%;
+    height: 6vh;
+    border-radius: 20px;
+    border: none;
+    background-color: #ffffff10
+  }
+  svg {
+    position: absolute;
+    left: 4vw;
+    bottom: 1.5vh;
+  }
+}
+
+.navGenres {
+  display: flex;
+  overflow: scroll;
+  margin-left: 4vw;
+  p {
+    padding: 2vh 4vw 2vh 0;
+  }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  //.active {
+  //  color: $orange-color
+  //}
+}
+
+.moviesGenre {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 4vw;
+  div:nth-child(4n+1) {
+    @include divSize(60%);
+  }
+  div:nth-child(4n+2) {
+    @include divSize(50%);
+  }
+  div:nth-child(4n+3) {
+    @include divSize(50%);
+    position: relative;
+    top: -6vh;
+    z-index: 0;
+  }
+  div:nth-child(4n+4) {
+    @include divSize(60%);
+    position: relative;
+    top: -9.5vh;
+    z-index: 0;
+  }
+  .movieGenre {
+    padding: 0 2vw;
+    width: 42vw;
+    img {
+      width: 42vw;
+    }
+    p {
+      margin-top: 1vh;
+      margin-bottom: 1vh;
+      span {
+        color: grey;
+      }
+    }
+  }
+}
+
+.color {
+  color: $orange-color;
+  text-decoration: underline;
+}
+.link {
+  color : inherit;
+  text-decoration : none;
+}
+
+//.movieRelated {
+//
+//}
