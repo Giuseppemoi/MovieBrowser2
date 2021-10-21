@@ -1,10 +1,13 @@
-import {FcPrevious} from "react-icons/fc";
-import {HiPlay} from "react-icons/hi";
+import {HiPlay, HiArrowLeft} from "react-icons/hi";
 import {IconContext} from "react-icons";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {AiFillStar} from "react-icons/ai";
 import {Link, useParams} from "react-router-dom";
+import { HiOutlineClock } from "react-icons/hi";
+import {logDOM} from "@testing-library/react";
+import Carousel from "react-elastic-carousel";
+import {NavLink} from "react-router-dom"
 
 export default function Detail() {
     const { id } = useParams()
@@ -15,9 +18,11 @@ export default function Detail() {
     const [movieId, setMovieId] = useState(id)
     const [movie, setMovie] = useState([])
     const [movieRelated, setMovieRelated] = useState([])
+    const [readMore, setReadMore] = useState(false)
 
     const URL_Movie = `movie/${movieId}?`
     const URL_Related = `movie/${movieId}/similar?`
+    const [overview, setOverview] = useState();
 
     async function moviesDataPromise(url) {
         return await axios.get(BASE_URL + url + API_KEY + PARAMS)
@@ -26,20 +31,25 @@ export default function Detail() {
     async function fetchMovie() {
         const moviesData = await moviesDataPromise(URL_Movie)
         await setMovie(moviesData.data)
+        await setOverview(moviesData.data.overview)
         const moviesRelatedData = await moviesDataPromise(URL_Related)
         await setMovieRelated(moviesRelatedData.data.results)
     }
 
     useEffect(async () => {
         await fetchMovie().then()
-    }, [])
+    }, [movieId, overview])
+
+    useEffect(async () => {
+        setMovieId(id)
+    }, [id])
 
     function DisplayGenres() {
         const genres = movie.genres
         if (movie.length !== 0) {
             return(
                 genres.map(genre => {
-                    return <p key={genre.id}>{genre.name}</p>
+                    return <p key={genre.id} className="textGenre">{genre.name}</p>
                 })
             )
         } else return <div>Loading</div>
@@ -47,10 +57,17 @@ export default function Detail() {
 
     function DisplayRelated() {
         return (
+            <Carousel
+                preventDefaultTouchmoveEvent={true}
+                itemsToShow={2}
+                pagination={false}
+                showArrows={false}
+            >{
             movieRelated.map(movie => {
                 return (
                     <div className="movieRelated" key={movie.id}>
-                        <Link className="link" to={movie && "/detail/" + movie.id}>
+                        <Link className="link"
+                              to={movie && "/detail/" + movie.id}>
                             <div className="divSize">
                                 <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
                             </div>
@@ -59,47 +76,83 @@ export default function Detail() {
                     </div>
                 )
             })
+            }
+            </Carousel>
         )
     }
 
+    function ButtonReadmore() {
+        if(overview.length > 200) {
+            return (
+                <button
+                    className="readMoreBtn"
+                    onClick={ () => setReadMore(!readMore) }>{ readMore ? 'Show less' :'Readmore..' }
+                </button>
+            )
+        } else {
+            return;
+        }
+    }
     return (
         <div className="detailContainer">
             <div className="top">
-                <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
-                <IconContext.Provider value={{size: "10vw"}}>
-                    <FcPrevious/>
-                </IconContext.Provider>
-                <IconContext.Provider value={{size: "10vw"}}>
-                    <HiPlay/>
+                <img src={"https://image.tmdb.org/t/p/w400" + movie.backdrop_path} alt={movie.title}/>
+                {/*<a onClick={() => window.history.back()} href='#'>*/}
+                <NavLink to="/home">
+                    <IconContext.Provider value={{size: "10vw", className: "iconReturn"}}>
+                        <HiArrowLeft/>
+                    </IconContext.Provider>
+                </NavLink>
+                {/*</a>*/}
+                <IconContext.Provider value={{size: "15vw", className: "iconPlay"}}>
+                    <HiPlay />
                 </IconContext.Provider>
             </div>
-            <div className="title">
-                <p>{movie.title}</p>
-                <p>{movie.runtime} minutes</p>
-                <p>
-                    <IconContext.Provider value={{size: "5vw"}}>
-                        <AiFillStar/>
-                    </IconContext.Provider>
-                    {movie.vote_average} (IMDb)
+            <div className="firstContainer">
+                <p className="titleMovie">{movie.title}</p>
+                <div className="infoGroup">
+                    <div className="timeGroup">
+                        <span className="timeIcon"><HiOutlineClock /></span>
+                        <p>{movie.runtime} minutes</p>
+                    </div>
+                    <p className="rateText">
+                        <IconContext.Provider value={{size: "5vw"}}>
+                            <AiFillStar/>
+                        </IconContext.Provider>
+                        {movie.vote_average} (IMDb)
+                    </p>
+                </div>
+            </div>
+            <div className="underLine"></div>
+            <div className="secondContainer">
+                <div className="dateGroup">
+                    <p className="titleDate">Release date</p>
+                    <div>
+                        <p className="textDate">{movie.release_date}</p>
+                        {/*<p className="textDate">{movie.release_date.substring(5,7)}</p>*/}
+                        {/*<p className="textDate">{movie.release_date.substring(8,10)}</p>*/}
+                        {/*<span>, </span>*/}
+                        {/*<p className="textDate">{movie.release_date.substring(0,4)}</p>*/}
+                    </div>
+                </div>
+                <div className="genreGroup">
+                    <p className="genreTitle">genre</p>
+                    <div>
+                        <DisplayGenres/>
+                    </div>
+                </div>
+            </div>
+            <div className="underLine"></div>
+            <div className="desGroup">
+                <p className="desTitle">Synopsis</p>
+                <p className="desText">
+                    {movie.overview}
+                    {/*{ readMore ? movie.overview : overview.substring(0,200)}*/}
+                    {/*<ButtonReadmore/>*/}
                 </p>
             </div>
-            <hr/>
-            <div>
-                <div>
-                    <p>Release date</p>
-                    <p>{movie.release_date}</p>
-                </div>
-                <div>
-                    <p>genre</p>
-                    <DisplayGenres/>
-                </div>
-            </div>
-            <div>
-                <p>Synopsis</p>
-                <p>{movie.overview}</p>
-            </div>
-            <div>
-                <p>Related Movies</p>
+            <div className="moreMovieGroup">
+                <p className="moreMovieTitle">Related Movies</p>
                 <DisplayRelated/>
             </div>
         </div>
