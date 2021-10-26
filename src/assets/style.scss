@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 
-$base-color: #15141F;
+$base-color: #28263e;
 $orange-color: #FF8F71;
 
 @mixin divSize($percent) {
@@ -182,6 +182,147 @@ body {
   text-decoration : none;
 }
 
-//.movieRelated {
-//
-//}
+.detailContainer {
+  .top {
+    height: 30vh;
+    overflow: hidden;
+    position: relative;
+    .iconPlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: $orange-color;
+    }
+    .iconReturn {
+      position: absolute;
+      top: 4vh;
+      left: 5vw;
+      color: white;
+      background-color: black;
+      padding: 5px;
+      border-radius: 50%;
+      font-size: 1.4em;
+      //stroke: black;
+      //stroke-width: 1px;
+    }
+  }
+  .firstContainer {
+    margin-top: 15px;
+    margin-left: 20px;
+    .titleMovie {
+      font-size: 2.2em;
+      width: 350px;
+      margin-bottom: 0;
+    }
+    .infoGroup {
+      display: flex;
+      align-items: center;
+      margin-top: 15px;
+    }
+    .rateText {
+      font-size: 1.3em;
+      margin-left: 20px;
+      svg {
+        margin-right: 10px;
+        color: #d9ad20;
+      }
+    }
+    .timeGroup {
+      display: flex;
+      align-items: center;
+      .timeIcon {
+        font-size: 1.2em;
+        margin-top: 5px;
+      }
+      p {
+        margin-left: 5px;
+        font-size:1.2em
+      }
+    }
+  }
+}
+  .underLine {
+    width: 85%;
+    margin: 15px auto;
+    height: 2px;
+    background-color: grey;
+  }
+
+  .secondContainer {
+    display: flex;
+    margin-left: 20px;
+    .dateGroup {
+      width: 155px;
+      .titleDate {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+      }
+      div {
+        display: flex;
+        .textDate {
+          font-size: 1em;
+          color: #BCBCBC;
+        }
+      }
+    }
+    .genreGroup {
+      margin-left: 25px;
+      .genreTitle {
+        font-size: 1.2em;
+        margin-left: 20px;
+        margin-bottom: 10px;
+      }
+      div {
+        display: flex;
+        flex-wrap: wrap;
+        .textGenre {
+          margin: 5px 10px;
+          font-size: 1em;
+          padding: 5px 12px;
+          border-radius: 1em;
+          background-color: #00000070;
+          -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+          border: 2px solid #00000050;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .desGroup {
+    margin-left: 20px;
+    .desTitle {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .desText {
+      font-size: 0.9em;
+      margin-bottom: 15px;
+      width: 90%;
+    }
+  }
+  .moreMovieGroup {
+    .moreMovieTitle {
+      margin-left: 20px;
+      font-size: 1.2em
+    }
+    .movieRelated {
+      width: 200px;
+      margin: 10px;
+      padding: 10px;
+      .link {
+        .divSize {
+          img {
+            border-radius: 1em;
+            width: 100%;
+          }
+        }
+        p {
+          span {
+            color: #BCBCBC;
+          }
+        }
+      }
+    }
+  }

@@ -6,9 +6,9 @@ import {Link} from "react-router-dom";
 
 
 export default function Home(props) {
-
+    let randomNumber = Math.floor(Math.random() * 20)
     function RandomMovie() {
-        const movie = props.movies[Math.floor(Math.random() * 20)]
+        const movie = props.movies[randomNumber]
         return (
             <div className="images">
                 <Link to={movie && "/detail/" + movie.id}>
@@ -29,14 +29,13 @@ export default function Home(props) {
             </div>
         )
     }
-
+    console.log(randomNumber)
     function Slider() {
         const dataMovies = props.movies
-
-        return  dataMovies.map(movie => {
+        return  dataMovies.filter( movie => movie.id !== dataMovies[randomNumber].id).map(movie => {
             return (
-                <Link to={movie && "/detail/" + movie.id}>
-                    <img key={movie.id} src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
+                <Link key={movie.id} to={movie && "/detail/" + movie.id}>
+                    <img src={"https://image.tmdb.org/t/p/w400" + movie.poster_path} alt={movie.title}/>
                 </Link>
             )
         })

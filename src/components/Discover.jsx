@@ -37,9 +37,11 @@ export default function Discover(props) {
             return;
         }
         setIsFetching(true)
+        // setPage(page + 1)
     }
 
     useEffect(() => {
+        setListMoviesGenre([])
         setPage(1)
         console.log(page)
         fetchMovie().then((result) => setListMoviesGenre(result))
@@ -75,6 +77,7 @@ export default function Discover(props) {
         function changeGenre(e) {
             // e.preventDefault()
             setGenreId(e.target.id)
+            setPage(1)
             e.target.classList.add('color')
         }
 
