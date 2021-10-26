@@ -99,7 +99,7 @@ export default function Detail() {
                 <img src={"https://image.tmdb.org/t/p/w400" + movie.backdrop_path} alt={movie.title}/>
                 {/*<a onClick={() => window.history.back()} href='#'>*/}
                 <NavLink to="/home">
-                    <IconContext.Provider value={{size: "10vw", className: "iconReturn"}}>
+                    <IconContext.Provider value={{className: "iconReturn"}}>
                         <HiArrowLeft/>
                     </IconContext.Provider>
                 </NavLink>

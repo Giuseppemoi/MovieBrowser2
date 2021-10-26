@@ -196,11 +196,15 @@ body {
     }
     .iconReturn {
       position: absolute;
-      top: 5vh;
+      top: 4vh;
       left: 5vw;
       color: white;
-      stroke: black;
-      stroke-width: 1px;
+      background-color: black;
+      padding: 5px;
+      border-radius: 50%;
+      font-size: 1.4em;
+      //stroke: black;
+      //stroke-width: 1px;
     }
   }
   .firstContainer {
